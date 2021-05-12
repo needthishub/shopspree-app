@@ -10,7 +10,6 @@ import {applyMiddleware, createStore} from 'redux';
 import {rootReducer} from "./store/rootReducer";
 import {Provider} from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
-import ProductDetailsAction from "./store/actions/productDetailsAction";
 import startRootSaga from "./store/rootSaga";
 import {composeWithDevTools} from 'redux-devtools-extension';
 
@@ -19,7 +18,6 @@ const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(sagaM
 
 sagaMiddleware.run(startRootSaga);
 
-store.dispatch({type: ProductDetailsAction.FETCH_PRODUCTS_DETAILS});
 
 (window as any).shopspree = store;
 
