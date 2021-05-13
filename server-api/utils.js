@@ -7,7 +7,7 @@ const hasProductInCategory = (inputCategory, productCategories) => {
     })
 
     for(productCategory of productCategories) {
-        if(inputCategoryArrLowerCase.includes(productCategories.toLowerCase())) {
+        if(inputCategoryArrLowerCase.includes(productCategory.toLowerCase())) {
             hasSameCategory = true;
             break;
         }

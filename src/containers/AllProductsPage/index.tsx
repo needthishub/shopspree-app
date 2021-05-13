@@ -9,18 +9,22 @@ import {
 import {StoreStateType} from "../../store/rootReducer";
 import {ProductCard} from "../../components/ProductCard";
 import './style.css';
-import ProductDetailsAction from "../../store/actions/productDetailsAction";
+import ShopAction from "../../store/actions/shopAction";
 
 class AllProductsPage extends React.Component<AllProductsPageProps> {
     componentDidMount() {
-        this.props.fetchShopProducts({});
+        const {shopProducts} = this.props;
+
+        if (!shopProducts.products.length) {
+            this.props.fetchShopProductsAndFilters();
+        }
     }
 
     renderAllProducts = () => {
         const {shopProducts} = this.props;
         return shopProducts.products.map(({title, variants, id}) => {
                 return (
-                    <div key={id}  className="product-item-container">
+                    <div key={id} className="product-item-container">
                         <ProductCard url={variants[0].image} name={title}/>
                     </div>
                 )
@@ -38,15 +42,18 @@ class AllProductsPage extends React.Component<AllProductsPageProps> {
 }
 
 const mapStateToProps: MapStateToProps<AllProductsStateProps, AllProductsOwnProps, StoreStateType> = (state) => {
+    const {shopProducts, productFilters} = state.Shop;
     return {
-        shopProducts: state.productDetails.shopProducts
+        shopProducts: shopProducts,
+        productFilters: productFilters
     }
 }
 
 const mapDispatchToProps: MapDispatchToPropsFunction<AllProductsDispatchToProps, AllProductsOwnProps> = (dispatch) => {
-    const {fetchShopProducts} = new ProductDetailsAction();
+    const {fetchShopProducts, fetchShopProductsAndFilters} = new ShopAction();
     return {
         fetchShopProducts: (options) => dispatch(fetchShopProducts(options)),
+        fetchShopProductsAndFilters: () => dispatch(fetchShopProductsAndFilters()),
     }
 }
 
