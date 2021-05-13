@@ -6,6 +6,7 @@ import {FetchShopProductsAction} from "../../store/actions/shopAction";
 export interface AllProductsStateProps {
     shopProducts: ShopProducts;
     productFilters: ProductFilters;
+    userFilters: ProductFilters;
 }
 
 export interface AllProductsOwnProps extends RouteComponentProps {
@@ -15,6 +16,7 @@ export interface AllProductsOwnProps extends RouteComponentProps {
 export interface AllProductsDispatchToProps {
     fetchShopProducts(options: GetProductsOptions): FetchShopProductsAction;
     fetchShopProductsAndFilters(): any;
+    updateUserFilters(filters: ProductFilters): any;
 }
 
 export type AllProductsPageProps = AllProductsStateProps & AllProductsOwnProps & AllProductsDispatchToProps;

@@ -42,7 +42,7 @@ class BestSeller extends React.Component<BestSellerProps> {
 
 const mapStateToProps: MapStateToProps<BestSellerStateProps, {}, StoreStateType> = (state) => {
     return {
-        bestSellerProducts: state.Shop.bestSellerProducts
+        bestSellerProducts: state.shop.bestSellerProducts
     }
 }
 

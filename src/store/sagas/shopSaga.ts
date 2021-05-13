@@ -20,6 +20,7 @@ function* workerFetchShopProductsSaga(action: FetchShopProductsAction) {
 function* workerFetchBestSellerProductsSaga() {
     const shopAPI = new ShopAPI();
     const shopAction = new ShopAction();
+
     try {
         const response = yield call(shopAPI.getProducts, {category: ["best seller"]});
         const {products} = response.data as ShopProducts;

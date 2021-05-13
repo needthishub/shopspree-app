@@ -10,6 +10,8 @@ import {StoreStateType} from "../../store/rootReducer";
 import {ProductCard} from "../../components/ProductCard";
 import './style.css';
 import ShopAction from "../../store/actions/shopAction";
+import {AllProductsSideBar} from "../../components/AllProductsSideBar";
+import UserAction from "../../store/actions/userAction";
 
 class AllProductsPage extends React.Component<AllProductsPageProps> {
     componentDidMount() {
@@ -33,27 +35,34 @@ class AllProductsPage extends React.Component<AllProductsPageProps> {
     }
 
     render() {
+        const {productFilters, userFilters, updateUserFilters} = this.props;
         return (
             <div className="all-products-page-container">
-                {this.renderAllProducts()}
+                <AllProductsSideBar productFilters={productFilters} onUpdateUserFilters={updateUserFilters}
+                                    userFilters={userFilters}/>
+                <div className="all-products-container">{this.renderAllProducts()}</div>
             </div>
         );
     }
 }
 
 const mapStateToProps: MapStateToProps<AllProductsStateProps, AllProductsOwnProps, StoreStateType> = (state) => {
-    const {shopProducts, productFilters} = state.Shop;
+    const {shopProducts, productFilters} = state.shop;
+    const {filters} = state.user;
     return {
         shopProducts: shopProducts,
-        productFilters: productFilters
+        productFilters: productFilters,
+        userFilters: filters
     }
 }
 
 const mapDispatchToProps: MapDispatchToPropsFunction<AllProductsDispatchToProps, AllProductsOwnProps> = (dispatch) => {
     const {fetchShopProducts, fetchShopProductsAndFilters} = new ShopAction();
+    const {updateUserFilters} = new UserAction();
     return {
         fetchShopProducts: (options) => dispatch(fetchShopProducts(options)),
         fetchShopProductsAndFilters: () => dispatch(fetchShopProductsAndFilters()),
+        updateUserFilters: (filters) => dispatch(updateUserFilters(filters)),
     }
 }
 
