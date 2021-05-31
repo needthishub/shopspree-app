@@ -1,0 +1,20 @@
+import React from 'react';
+import {getDiscountPrice} from "../../utils/product";
+import {ProductCardModalPriceUIProps} from "./interface";
+
+export const ProductCardModalPriceUI: React.FC<ProductCardModalPriceUIProps> = ({selectedVariant}) => {
+    const {discount, price} = selectedVariant;
+
+    const priceUI = (
+        <p className="price-ui">
+            {discount ? (
+                <>
+                    <del className="old-price">{price}</del>
+                    <ins>${getDiscountPrice(price, discount)}</ins>
+                </>
+            ) : <ins>{price}</ins>}
+        </p>
+    );
+
+    return priceUI;
+}

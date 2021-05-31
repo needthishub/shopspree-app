@@ -5,6 +5,7 @@ import {connect, MapDispatchToPropsFunction, MapStateToProps} from "react-redux"
 import {BestSellerDispatchProps, BestSellerProps, BestSellerStateProps} from "./interface";
 import {StoreStateType} from "../../store/rootReducer";
 import ShopAction from "../../store/actions/shopAction";
+import UserAction from "../../store/actions/userAction";
 
 class BestSeller extends React.Component<BestSellerProps> {
     componentDidMount() {
@@ -16,14 +17,11 @@ class BestSeller extends React.Component<BestSellerProps> {
     }
 
     renderBestSellerProducts = () => {
-        const {bestSellerProducts} = this.props;
+        const {bestSellerProducts, addToCart} = this.props;
 
-        return bestSellerProducts.map(({title, id, variants}) => {
+        return bestSellerProducts.map((product) => {
             return (
-                <ProductCard
-                    key={id}
-                    url={variants[0].image}
-                    name={title}/>
+                <ProductCard addToCart={addToCart} product={product} key={product.id}/>
             )
         })
     }
@@ -48,8 +46,11 @@ const mapStateToProps: MapStateToProps<BestSellerStateProps, {}, StoreStateType>
 
 const mapDispatchToProps: MapDispatchToPropsFunction<BestSellerDispatchProps, {}> = (dispatch) => {
     const {fetchAllBestSellerProducts} = new ShopAction();
+    const {addToCart} = new UserAction();
     return {
-        fetchAllBestSellerProducts: () => dispatch(fetchAllBestSellerProducts())
+        fetchAllBestSellerProducts: () => dispatch(fetchAllBestSellerProducts()),
+        addToCart: (productPurchase) => dispatch(addToCart(productPurchase)),
+
     }
 }
 
