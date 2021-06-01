@@ -1,5 +1,5 @@
 import React from 'react';
-import {getDiscountPrice} from "../../utils/product";
+import {getDiscountedPrice} from "../../utils/product";
 import {ProductCardModalPriceUIProps} from "./interface";
 
 export const ProductCardModalPriceUI: React.FC<ProductCardModalPriceUIProps> = ({selectedVariant}) => {
@@ -10,7 +10,7 @@ export const ProductCardModalPriceUI: React.FC<ProductCardModalPriceUIProps> = (
             {discount ? (
                 <>
                     <del className="old-price">{price}</del>
-                    <ins>${getDiscountPrice(price, discount)}</ins>
+                    <ins>${getDiscountedPrice(price, discount)}</ins>
                 </>
             ) : <ins>{price}</ins>}
         </p>
