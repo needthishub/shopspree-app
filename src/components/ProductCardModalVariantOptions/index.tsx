@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button} from "../../ui-components/Button";
 import {ProductCardModalVariantOptionsProps} from "./interface";
+import {getBackgroundColorStyleForButton} from "../../utils/product";
 
 export const ProductCardModalVariantOptions: React.FC<ProductCardModalVariantOptionsProps> =
     ({variants, selectedVariant, variantsOptionsAvailable, onColorChange, onSizeChange}) => {
@@ -50,10 +51,7 @@ export const ProductCardModalVariantOptions: React.FC<ProductCardModalVariantOpt
         );
 
         variantsOptionsAvailable[selectedVariant.size].forEach(color => {
-            const arrayColors = color.split('&');
-            const backgroundStyle: React.CSSProperties = arrayColors.length > 1
-                ? {backgroundImage: `linear-gradient(${arrayColors.join(',')}`}
-                : {backgroundColor: color};
+            const backgroundStyle: React.CSSProperties = getBackgroundColorStyleForButton(color);
 
             colorsUI.push(
                 <Button
