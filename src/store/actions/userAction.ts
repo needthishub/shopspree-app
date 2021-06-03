@@ -5,7 +5,8 @@ export type UserReducerAction =
     UpdateUserFiltersAction
     | UpdateUserShopProductsPageAction
     | AddToCartAction
-    | RemoveToCartAction;
+    | RemoveToCartAction
+    | CleanCartAction;
 
 export interface UpdateUserFiltersAction {
     type: typeof UserAction.UPDATE_USER_FILTERS,
@@ -27,11 +28,16 @@ export interface RemoveToCartAction {
     productPurchase: ProductPurchase;
 }
 
+export interface CleanCartAction {
+    type: typeof UserAction.CLEAN_CART;
+}
+
 class UserAction {
     static readonly UPDATE_USER_FILTERS = 'UPDATE_USER_FILTERS';
     static readonly UPDATE_USER_SHOP_PRODUCTS_PAGE = 'UPDATE_USER_SHOP_PRODUCTS_PAGE';
     static readonly ADD_TO_CART = 'ADD_TO_CART';
     static readonly REMOVE_TO_CART = 'REMOVE_TO_CART';
+    static readonly CLEAN_CART = 'CLEAN_CART';
 
     updateUserFilters = (filters: ProductFilters): UpdateUserFiltersAction => {
         return {
@@ -58,6 +64,12 @@ class UserAction {
         return {
             type: UserAction.REMOVE_TO_CART,
             productPurchase,
+        }
+    }
+
+    cleanCart = (): CleanCartAction => {
+        return {
+            type: UserAction.CLEAN_CART,
         }
     }
 }

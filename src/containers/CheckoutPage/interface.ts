@@ -9,4 +9,8 @@ export interface CheckoutPageOwnProps extends RouteComponentProps {
 
 }
 
-export type CheckoutPageProps = CheckoutPageStateProps & CheckoutPageOwnProps;
+export interface CheckoutPageDispatchProps {
+    cleanCart(): any;
+}
+
+export type CheckoutPageProps = CheckoutPageStateProps & CheckoutPageOwnProps & CheckoutPageDispatchProps;

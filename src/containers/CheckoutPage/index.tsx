@@ -1,12 +1,14 @@
 import React from 'react';
-import {CheckoutPageOwnProps, CheckoutPageProps, CheckoutPageStateProps} from "./interface";
-import {connect, MapStateToProps} from "react-redux";
+import {CheckoutPageDispatchProps, CheckoutPageOwnProps, CheckoutPageProps, CheckoutPageStateProps} from "./interface";
+import {connect, MapDispatchToPropsFunction, MapStateToProps} from "react-redux";
 import {StoreStateType} from "../../store/rootReducer";
 import {getSubtotalPrice} from "../../utils/product";
 import {CheckoutPageProduct} from "../../components/CheckoutPageProduct";
 import './style.css';
 import {Redirect} from "react-router-dom";
 import {ROUTE} from "../../constants/route";
+import CustomerInformation from "../../components/CustomerInformation";
+import UserAction from "../../store/actions/userAction";
 
 class CheckoutPage extends React.Component<CheckoutPageProps> {
     getCartDetails = () => {
@@ -33,7 +35,7 @@ class CheckoutPage extends React.Component<CheckoutPageProps> {
     }
 
     render() {
-        const {cart} = this.props;
+        const {cart, cleanCart, history} = this.props;
         const {totalPrice, cartItems} = this.getCartDetails();
         return cart.length ? (
             <div className="checkout-page-container">
@@ -55,7 +57,7 @@ class CheckoutPage extends React.Component<CheckoutPageProps> {
                         </div>
                     </div>
                 </div>
-                <div className="customer-info"></div>
+                <CustomerInformation history={history} cart={cart} cleanCart={cleanCart}/>
             </div>
         ) : <Redirect to={ROUTE.HOME}/>;
     }
@@ -68,6 +70,14 @@ const mapStateToProps: MapStateToProps<CheckoutPageStateProps, CheckoutPageOwnPr
         cart
     }
 
-}
+};
 
-export default connect(mapStateToProps)(CheckoutPage);
+const mapDispatchToProps: MapDispatchToPropsFunction<CheckoutPageDispatchProps, CheckoutPageOwnProps> = (dispatch) => {
+    const {cleanCart} = new UserAction();
+
+    return {
+        cleanCart: () => dispatch(cleanCart()),
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CheckoutPage);
