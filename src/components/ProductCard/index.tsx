@@ -4,6 +4,7 @@ import './style.css';
 import {ProductCardModal} from "../ProductCardModal";
 import {getProductVariantDetails} from "../../utils/product";
 import {ProductPurchase} from "../../store/reducers/userReducer";
+import ThemeContextProvider, {ThemeContext} from "../../context/ThemeContext";
 
 export class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
     constructor(props: ProductCardProps) {
@@ -32,21 +33,27 @@ export class ProductCard extends React.Component<ProductCardProps, ProductCardSt
         const {product, addToCart} = this.props
         const {initialVariant, variants, variantsOptionsAvailable} = getProductVariantDetails(product);
 
-        return initialVariant ? (
-            <div onClick={this.onClickProductCard} className="product-card-container">
-                <div style={{backgroundImage: `url(${initialVariant.image})`}} className="product-image"/>
-                <div className="product-details">
-                    <p>{initialVariant.title}</p>
-                </div>
-                <ProductCardModal
-                    onClickOutsideModalBody={this.onClickOutsideModalBody}
-                    show={showDetails}
-                    initialVariant={initialVariant}
-                    variants={variants}
-                    variantsOptionsAvailable={variantsOptionsAvailable}
-                    addToCart={this.handleAddToCard}/>
-            </div>
-        ) : null;
+        return (
+            <ThemeContext.Consumer>
+                {theme => (
+                    initialVariant ? (
+                        <div onClick={this.onClickProductCard} className={`product-card-container ${theme}`}>
+                            <div style={{backgroundImage: `url(${initialVariant.image})`}} className="product-image"/>
+                            <div className="product-details">
+                                <p>{initialVariant.title}</p>
+                            </div>
+                            <ProductCardModal
+                                onClickOutsideModalBody={this.onClickOutsideModalBody}
+                                show={showDetails}
+                                initialVariant={initialVariant}
+                                variants={variants}
+                                variantsOptionsAvailable={variantsOptionsAvailable}
+                                addToCart={this.handleAddToCard}/>
+                        </div>
+                    ) : null
+                )}
+            </ThemeContext.Consumer>
+        )
     }
 }
 
