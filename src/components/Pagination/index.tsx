@@ -1,57 +1,43 @@
-import React from 'react';
-import {PaginationProps, PaginationState} from "./interface";
+import React, {useContext, useState} from 'react';
+import {PaginationProps} from "./interface";
 import './style.css';
 import {Button} from "../../ui-components/Button";
-import ThemeContextProvider, {ThemeContext} from "../../context/ThemeContext";
+import {ThemeContext} from "../../context/ThemeContext";
 
-class Pagination extends React.Component<PaginationProps, PaginationState> {
-    constructor(props: PaginationProps) {
-        super(props);
+const Pagination: React.FC<PaginationProps> = ({overrideSelectedPage, onChange, numberOfPages}) => {
+    const [selectedPage, setSelectedPage] = useState(1);
+    const theme = useContext(ThemeContext);
 
-        this.state = {
-            selectedPage: 1
-        }
-    }
-
-    currentSelectedPage = () => {
-        const {overrideSelectedPage} = this.props;
-        const {selectedPage} = this.state;
-
+    const getCurrentSelectedPage = () => {
         return overrideSelectedPage || selectedPage;
     }
 
-    handleLeftCaretClick = () => {
-        const currentSelectedPage = this.currentSelectedPage();
+    const handleLeftCaretClick = () => {
+        const currentSelectedPage = getCurrentSelectedPage();
 
         const newPage = currentSelectedPage === 1 ? currentSelectedPage : currentSelectedPage - 1;
 
-        this.setState({selectedPage: newPage});
-        this.props.onChange(newPage);
-    }
-
-    handleRightCaretClick = () => {
-        const {numberOfPages, onChange} = this.props;
-
-        const currentSelectedPage = this.currentSelectedPage();
-
-        const newPage = currentSelectedPage === numberOfPages ? currentSelectedPage : currentSelectedPage + 1;
-        this.setState({selectedPage: newPage});
+        setSelectedPage(newPage);
         onChange(newPage);
     }
 
-    pageClick = (page: number) => () => {
-        const {selectedPage} = this.state;
+    const handleRightCaretClick = () => {
+        const currentSelectedPage = getCurrentSelectedPage();
 
+        const newPage = currentSelectedPage === numberOfPages ? currentSelectedPage : currentSelectedPage + 1;
+        setSelectedPage(newPage);
+        onChange(newPage);
+    }
+
+    const pageClick = (page: number) => () => {
         if (selectedPage !== page) {
-            this.setState({selectedPage: page});
-            this.props.onChange(page);
+            setSelectedPage(page);
+            onChange(page);
         }
     }
 
-    renderPageButtons = () => {
-        const {numberOfPages} = this.props;
-
-        const currentSelectedPage = this.currentSelectedPage();
+    const renderPageButtons = () => {
+        const currentSelectedPage = getCurrentSelectedPage();
 
         return [...new Array(numberOfPages)].map((value, index) => {
             const page = index + 1;
@@ -60,7 +46,7 @@ class Pagination extends React.Component<PaginationProps, PaginationState> {
                 <Button
                     key={page}
                     selected={currentSelectedPage === page}
-                    onClick={this.pageClick(page)}
+                    onClick={pageClick(page)}
                     className="page-button"
                 >
                     {page}
@@ -69,23 +55,15 @@ class Pagination extends React.Component<PaginationProps, PaginationState> {
         })
     }
 
-
-    render() {
-        return (
-            <ThemeContext.Consumer>
-                {theme => (
-                    <div className={`pagination-container ${theme}`}>
-                        <i onClick={this.handleLeftCaretClick} className="fas fa-caret-left page-caret"></i>
-                        <div className="pages-container">
-                            {this.renderPageButtons()}
-                        </div>
-                        <i onClick={this.handleRightCaretClick} className="fas fa-caret-right page-caret"></i>
-                    </div>
-                )}
-            </ThemeContext.Consumer>
-        );
-    }
-
+    return (
+        <div className={`pagination-container ${theme}`}>
+            <i onClick={handleLeftCaretClick} className="fas fa-caret-left page-caret"/>
+            <div className="pages-container">
+                {renderPageButtons()}
+            </div>
+            <i onClick={handleRightCaretClick} className="fas fa-caret-right page-caret"/>
+        </div>
+    );
 }
 
 export default Pagination;
