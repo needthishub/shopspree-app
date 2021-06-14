@@ -44,7 +44,7 @@ export interface Shop {
     productFilters: ProductFilters
 }
 
-const ShopInitialState: Shop = {
+export const shopInitialState: Shop = {
     shopProducts: {
         products: [],
         productsCount: 0,
@@ -58,7 +58,7 @@ const ShopInitialState: Shop = {
     bestSellerProducts: []
 }
 
-export const ShopReducer: Reducer<Shop, ShopReducerAction> = (state = ShopInitialState, action) => {
+export const ShopReducer: Reducer<Shop, ShopReducerAction> = (state = shopInitialState, action) => {
     switch (action.type) {
         case ShopAction.SET_SHOP_PRODUCTS_AND_FILTERS:
             return update(state, {shopProducts: {$set: action.shopProducts},
