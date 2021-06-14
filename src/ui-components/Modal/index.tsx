@@ -1,47 +1,34 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {ModalProps} from "./interface";
 import ReactDOM from 'react-dom'
 import './style.css';
 
-export class Modal extends React.Component<ModalProps> {
-    root: HTMLDivElement;
-    el: HTMLDivElement;
+export const Modal: React.FC<ModalProps> = ({onClickOutsideModalBody, show = true, modalBodyClassName, children}) => {
+    const root = useRef(document.querySelector("#root") as HTMLDivElement);
+    const el = useRef(document.createElement("div"));
 
-    constructor(props: ModalProps) {
-        super(props);
+    useEffect(() => {
+        root.current.appendChild(el.current);
+        return function cleanup() {
+            root.current.removeChild(el.current);
+        };
+    }, []);
 
-        this.root = document.querySelector("#root") as HTMLDivElement;
-        this.el = document.createElement("div");
-    }
-
-    componentDidMount() {
-        this.root.appendChild(this.el);
-    }
-
-    componentWillUnmount() {
-        this.root.removeChild(this.el);
-    }
-
-    removerOnClickPropagation = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const removerOnClickPropagation = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
     }
 
-    onClickOutsideModalBody = () => {
-        const {onClickOutsideModalBody} = this.props;
-
+    const handleClickOutsideModalBody = () => {
         onClickOutsideModalBody && onClickOutsideModalBody();
     }
 
-    render() {
-        const {show = true, modalBodyClassName} = this.props;
-        return show ? ReactDOM.createPortal(
-            <div onClick={this.removerOnClickPropagation} className="modal-container">
-                <div onClick={this.onClickOutsideModalBody} className="modal-overlay"/>
-                <div className={`modal-body ${modalBodyClassName || ''}`}>
-                    {this.props.children}
-                </div>
-            </div>,
-            this.el
-        ) : null;
-    }
+    return show ? ReactDOM.createPortal(
+        <div onClick={removerOnClickPropagation} className="modal-container">
+            <div onClick={handleClickOutsideModalBody} className="modal-overlay"/>
+            <div className={`modal-body ${modalBodyClassName || ''}`}>
+                {children}
+            </div>
+        </div>,
+        el.current
+    ) : null;
 }
