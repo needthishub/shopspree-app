@@ -13,9 +13,3 @@ export interface PopoverChildrenPosition {
     bottom: number;
     left: number;
 }
-
-export interface PopoverState {
-    show: boolean;
-    childrenPosition: PopoverChildrenPosition;
-    contentWidth: number;
-}
