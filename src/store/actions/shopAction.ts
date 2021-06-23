@@ -1,7 +1,13 @@
 import {Product, ProductFilters, ShopProducts} from "../reducers/shopReducer";
 import {GetProductsOptions} from "../../api/shopAPI";
 
-export type ShopReducerAction = SetShopProductsAction | FetchShopProductsAction | SetBestSellerProductsAction | FetchBestSellerProductsAction | SetShopProductsAndFilterAction;
+export type ShopReducerAction =
+    SetShopProductsAction
+    | FetchShopProductsAction
+    | SetBestSellerProductsAction
+    | FetchBestSellerProductsAction
+    | SetShopProductsAndFilterAction
+    | FetchShopProductsAndFilterAction;
 
 export interface SetShopProductsAction {
     type: typeof ShopAction.SET_SHOP_PRODUCTS;

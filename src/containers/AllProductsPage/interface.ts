@@ -11,9 +11,7 @@ export interface AllProductsStateProps {
     userSelectedPage: number;
 }
 
-export interface AllProductsOwnProps extends RouteComponentProps {
-
-}
+export interface AllProductsPageProps extends RouteComponentProps {}
 
 export interface AllProductsDispatchToProps {
     fetchShopProducts(options: GetProductsOptions): FetchShopProductsAction;
@@ -26,5 +24,3 @@ export interface AllProductsDispatchToProps {
 
     addToCart(product: ProductPurchase): any;
 }
-
-export type AllProductsPageProps = AllProductsStateProps & AllProductsOwnProps & AllProductsDispatchToProps;

@@ -41,7 +41,7 @@ export interface ProductFilters {
 export interface Shop {
     shopProducts: ShopProducts;
     bestSellerProducts: Product[];
-    productFilters: ProductFilters
+    productFilters: ProductFilters;
 }
 
 export const shopInitialState: Shop = {
@@ -58,7 +58,7 @@ export const shopInitialState: Shop = {
     bestSellerProducts: []
 }
 
-export const ShopReducer: Reducer<Shop, ShopReducerAction> = (state = shopInitialState, action) => {
+export const shopReducer: Reducer<Shop, ShopReducerAction> = (state = shopInitialState, action) => {
     switch (action.type) {
         case ShopAction.SET_SHOP_PRODUCTS_AND_FILTERS:
             return update(state, {shopProducts: {$set: action.shopProducts},
