@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import {Input} from "../../ui-components/Input";
 import {Button} from "../../ui-components/Button";
 import {
@@ -9,60 +9,40 @@ import {
     CustomerInformationField,
     CustomerInformationFieldsList
 } from "../../constants/user";
-import {CustomerInformationFieldRefs, CustomerInformationProps, CustomerInformationState} from "./interface";
+import {CustomerInformationFieldRefs, CustomerInformationProps} from "./interface";
 import './style.css';
 import ShopAPI from "../../api/shopAPI";
-import {omit} from "../../utils/helper";
 import {Modal} from "../../ui-components/Modal";
 import {ROUTE} from "../../constants/route";
+import update from 'immutability-helper';
+import {initializeFieldRefs} from "./utils";
 
-class CustomerInformation extends React.Component<CustomerInformationProps, CustomerInformationState> {
-    fieldRefs: CustomerInformationFieldRefs = {} as CustomerInformationFieldRefs;
+const CustomerInformation: React.FC<CustomerInformationProps> = ({cart, history, cleanCart}) => {
+    const fieldsList = useMemo(() => Object.keys(CUSTOMER_INFORMATION_FIELDS_LIST), []);
+    const initialFieldRefs = useMemo(initializeFieldRefs, []);
+    const fieldRefs = useRef<CustomerInformationFieldRefs>(initialFieldRefs);
+    const [fieldState, setFieldState] = useState<CustomerInformationFieldsList>({...CUSTOMER_INFORMATION_FIELD_INITIAL_STATE});
+    const [fieldError, setFieldError] = useState<CustomerInformationFieldsList>({...CUSTOMER_INFORMATION_FIELD_INITIAL_STATE});
+    const [hasCompletePurchaseClick, setHasCompletePurchaseClick] = useState(false);
+    const [showThankyouModal, setShowThankyouModal] = useState(false);
 
-    constructor(props: CustomerInformationProps) {
-        super(props);
-
-        this.state = {
-            ...CUSTOMER_INFORMATION_FIELD_INITIAL_STATE,
-            error: {...CUSTOMER_INFORMATION_FIELD_INITIAL_STATE},
-            hasCompletePurchaseClick: false,
-            showThankyouModal: false,
-        }
-
-        Object.keys(CUSTOMER_INFORMATION_FIELDS_LIST).forEach(key => {
-            const stateKey = key as CustomerInformationField;
-            this.fieldRefs[stateKey] = React.createRef();
-        })
-
-    }
-
-    validateInputField = (field: CustomerInformationField, value: string) => {
+    const validateInputField = (field: CustomerInformationField, value: string) => {
         const errorMessage = value ? '' : CUSTOMER_INFORMATION_FIELD_ERROR;
 
-        this.setState({
-            error: {
-                ...this.state.error,
-                [field]: errorMessage,
-            }
-        })
-    }
+        setFieldError(update(fieldError, {[field]: {$set: errorMessage}}));
+    };
 
-    handleInputOnChange = (field: CustomerInformationField) => (event: React.ChangeEvent<HTMLInputElement>) => {
-        const {hasCompletePurchaseClick} = this.state;
+    const handleInputOnChange = (field: CustomerInformationField) => (event: React.ChangeEvent<HTMLInputElement>) => {
         const {value} = event.currentTarget;
 
-        this.setState({
-            [field]: value
-        } as CustomerInformationFieldsList);
+        setFieldState(update(fieldState, {[field]: {$set: value}}));
 
-        hasCompletePurchaseClick && this.validateInputField(field, value);
+        hasCompletePurchaseClick && validateInputField(field, value);
 
     }
 
-    renderInputFields = () => {
-        const {error} = this.state;
-
-        return Object.keys(CUSTOMER_INFORMATION_FIELDS_LIST).map(field => {
+    const renderInputFields = () => {
+        return fieldsList.map(field => {
             const customerInfoField = field as CustomerInformationField;
             const label = CUSTOMER_INFORMATION_FIELDS_LIST[customerInfoField];
 
@@ -70,17 +50,17 @@ class CustomerInformation extends React.Component<CustomerInformationProps, Cust
                 <Input key={label}
                        inputContainerStyle={{marginBottom: '10px'}}
                        inputStyle={{width: CUSTOMER_INFORMATION_FIELD_WIDTH}}
-                       onChange={this.handleInputOnChange(customerInfoField)}
+                       onChange={handleInputOnChange(customerInfoField)}
                        label={label}
-                       error={error[customerInfoField]}
-                       positive={!!this.state[customerInfoField]}
-                       inputRef={this.fieldRefs[customerInfoField]}
+                       error={fieldError[customerInfoField]}
+                       positive={!!fieldState[customerInfoField]}
+                       inputRef={fieldRefs.current[customerInfoField]}
                 />
             )
         })
     };
 
-    allFieldsAreValid = () => {
+    const allFieldsAreValid = () => {
         let hasError = false;
         const error: CustomerInformationFieldsList = {
             ...CUSTOMER_INFORMATION_FIELD_INITIAL_STATE
@@ -88,68 +68,61 @@ class CustomerInformation extends React.Component<CustomerInformationProps, Cust
 
         let hasFocusToErrorField = false;
 
-        Object.keys(CUSTOMER_INFORMATION_FIELDS_LIST).forEach(key => {
+        fieldsList.forEach(key => {
             const stateKey = key as CustomerInformationField;
 
-            if (!this.state[stateKey]) {
+            if (!fieldState[stateKey]) {
                 error[stateKey] = CUSTOMER_INFORMATION_FIELD_ERROR;
                 hasError = true;
 
                 if (!hasFocusToErrorField) {
                     hasFocusToErrorField = true;
-                    const fieldRef = this.fieldRefs[stateKey];
+                    const fieldRef = fieldRefs.current[stateKey];
                     fieldRef.current && fieldRef.current.focus();
                 }
             }
         });
 
-        this.setState({error});
+        setFieldError(error);
 
         return !hasError;
-    }
+    };
 
-    handleButtonClick = () => {
-        const {cart} = this.props;
-        this.setState({hasCompletePurchaseClick: true})
-        if (this.allFieldsAreValid()) {
+    const handleButtonClick = () => {
+        setHasCompletePurchaseClick(true);
+
+        if (allFieldsAreValid()) {
             const shopApi = new ShopAPI();
 
             shopApi.postOrder({
                 cart,
-                user: {
-                    ...omit(this.state, ['error', 'hasCompletePurchaseClick'])
-                }
+                user: fieldState
             }).then(() => {
-                this.setState({showThankyouModal: true});
+                setShowThankyouModal(true);
             })
         }
-    }
+    };
 
-    handleShopMoreClick = () => {
-        const {cleanCart, history} = this.props;
-
+    const handleShopMoreClick = () => {
         cleanCart();
         history.push(ROUTE.ALL_PRODUCTS)
     }
 
-    render() {
-        const {showThankyouModal} = this.state;
-        return (
-            <div className="customer-info-container">
-                <div className="heading text">Billing Information</div>
-                {this.renderInputFields()}
-                <Button className="complete-purchase-btn"
-                        style={{width: CUSTOMER_INFORMATION_FIELD_WIDTH}}
-                        type="primary"
-                        onClick={this.handleButtonClick}>Complete Purchase</Button>
-                <Modal modalBodyClassName="customer-info-modal-body" show={showThankyouModal}>
-                    <div className="header">Thank You! We have received your order!</div>
-                    <p>Please wait 5 to 10 business days for your items to arrived.</p>
-                    <Button type="primary" onClick={this.handleShopMoreClick}>Shop More</Button>
-                </Modal>
-            </div>
-        );
-    }
+    return (
+        <div className="customer-info-container">
+            <div className="heading text">Billing Information</div>
+            {renderInputFields()}
+            <Button className="complete-purchase-btn"
+                    style={{width: CUSTOMER_INFORMATION_FIELD_WIDTH}}
+                    type="primary"
+                    onClick={handleButtonClick}>Complete Purchase</Button>
+            <Modal modalBodyClassName="customer-info-modal-body" show={showThankyouModal}>
+                <div className="header">Thank You! We have received your order!</div>
+                <p>Please wait 5 to 10 business days for your items to arrived.</p>
+                <Button type="primary" onClick={handleShopMoreClick}>Shop More</Button>
+            </Modal>
+        </div>
+    );
 }
 
 export default CustomerInformation;

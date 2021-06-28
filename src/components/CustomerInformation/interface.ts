@@ -1,4 +1,4 @@
-import {CustomerInformationField, CustomerInformationFieldsList} from "../../constants/user";
+import {CustomerInformationField} from "../../constants/user";
 import React from "react";
 import {ProductPurchase} from "../../store/reducers/userReducer";
 import {History} from "history";
@@ -8,13 +8,6 @@ export interface CustomerInformationProps {
     history: History;
 
     cleanCart(): any;
-}
-
-export interface CustomerInformationState extends CustomerInformationFieldsList {
-    error: CustomerInformationFieldsList;
-    hasCompletePurchaseClick: boolean;
-    showThankyouModal: boolean;
-
 }
 
 export type CustomerInformationFieldRefs = {
