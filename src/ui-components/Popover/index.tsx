@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {PopoverChildrenPosition, PopoverProps} from "./interface";
 import './style.css';
 import {useLayoutEffectOnUpdate} from "../../customHooks/useLayoutEffectOnUpdate";
+import {INITIAL_CHILDREN_POSITION} from "./constant";
 
 const Popover: React.FC<PopoverProps> = ({children, controlShow, onClick, position, popoverBodyClassName, content}) => {
     const root = useRef(document.querySelector('#root') as HTMLDivElement);
@@ -11,12 +12,16 @@ const Popover: React.FC<PopoverProps> = ({children, controlShow, onClick, positi
     const popperRef = useRef<HTMLDivElement>(null);
     const [show, setShow] = useState(false);
     const [contentWidth, setContentWidth] = useState(0);
-    const [childrenPosition, setChildrenPosition] = useState<PopoverChildrenPosition>({
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-    });
+    const [childrenPosition, setChildrenPosition] = useState<PopoverChildrenPosition>(INITIAL_CHILDREN_POSITION);
+    const currentShow = controlShow === undefined ? show : controlShow;
+
+    const handleContentClick = () => {
+        controlShow === undefined && setShow(!show);
+
+        onClick && onClick();
+    };
+
+    const ChildrenComponent = React.cloneElement(children as React.ReactElement, {ref: childrenRef, onClick: handleContentClick});
 
     useEffect(() => {
         root.current.appendChild(el.current);
@@ -43,27 +48,10 @@ const Popover: React.FC<PopoverProps> = ({children, controlShow, onClick, positi
         const popperWidth = popperRef.current ?
             popperRef.current?.getBoundingClientRect().width : 0;
 
-        if ((!contentWidth || popperWidth !== contentWidth) && getShowValue()) {
+        if ((!contentWidth || popperWidth !== contentWidth) && currentShow) {
             setContentWidth(popperWidth);
         }
     });
-
-    const renderChildElement = () => {
-        return React.cloneElement(children as React.ReactElement, {
-            ref: childrenRef,
-            onClick: handleContentClick
-        });
-    }
-
-    const getShowValue = () => {
-        return controlShow === undefined ? show : controlShow;
-    }
-
-    const handleContentClick = () => {
-        controlShow === undefined && setShow(!show);
-
-        onClick && onClick();
-    }
 
     const renderPopover = () => {
         let style: React.CSSProperties;
@@ -83,7 +71,7 @@ const Popover: React.FC<PopoverProps> = ({children, controlShow, onClick, positi
                 break;
         }
 
-        return getShowValue() ? ReactDOM.createPortal(
+        return currentShow ? ReactDOM.createPortal(
             <div className="popover-content-container" ref={popperRef} style={style}>
                 <div className={`popover-body ${popoverBodyClassName || ''}`}>
                     {content}
@@ -91,14 +79,14 @@ const Popover: React.FC<PopoverProps> = ({children, controlShow, onClick, positi
             </div>,
             el.current
         ) : null;
-    }
+    };
 
     return (
         <>
-            {renderChildElement()}
+            {ChildrenComponent}
             {renderPopover()}
         </>
     );
-}
+};
 
 export default Popover;

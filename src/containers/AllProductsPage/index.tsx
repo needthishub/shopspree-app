@@ -1,4 +1,4 @@
-import React, {Dispatch, useEffect} from 'react';
+import React, {Dispatch, useCallback, useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {AllProductsPageProps} from "./interface";
 import {StoreAction, StoreStateType} from "../../store/rootReducer";
@@ -10,15 +10,10 @@ import UserAction from "../../store/actions/userAction";
 import Pagination from "../../components/Pagination";
 import {ProductFilters} from "../../store/reducers/shopReducer";
 import {ProductPurchase} from "../../store/reducers/userReducer";
+import {allProductsStoreEqualityFn} from "./utils";
 
 const AllProductsPage: React.FC<AllProductsPageProps> = () => {
-    const {shop, user} = useSelector<StoreStateType, StoreStateType>((state) => state, (prevState, currentState) => {
-        const {shop: prevShop, user: prevUser} = prevState;
-        const {shop, user} = currentState;
-        return shop.shopProducts === prevShop.shopProducts && shop.productFilters === prevShop.productFilters && user.filters === prevUser.filters
-            && user.shopProductsPage === prevUser.shopProductsPage;
-    });
-
+    const {shop, user} = useSelector<StoreStateType, StoreStateType>((state) => state, allProductsStoreEqualityFn);
     const dispatch = useDispatch<Dispatch<StoreAction>>();
     const {shopProducts, productFilters} = shop;
     const {filters: userFilters, shopProductsPage: userSelectedPage} = user;
@@ -52,9 +47,9 @@ const AllProductsPage: React.FC<AllProductsPageProps> = () => {
         if (userSelectedPage !== selectedPage) dispatch(updateUserShopProductsPage(selectedPage));
     }
 
-    const handleUpdateUserFilters = (filters: ProductFilters) => {
+    const handleUpdateUserFilters = useCallback((filters: ProductFilters) => {
         dispatch(updateUserFilters(filters));
-    }
+    }, []);
 
     return (
         <div className="all-products-page-container">

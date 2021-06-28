@@ -6,11 +6,11 @@ import Checkbox from "../../ui-components/Checkbox";
 import './style.css';
 import update from "immutability-helper";
 
-export const AllProductsSideBar: React.FC<ProductFiltersProps> = ({
-                                                                      productFilters,
-                                                                      userFilters,
-                                                                      onUpdateUserFilters
-                                                                  }) => {
+export const AllProductsSideBar = React.memo<ProductFiltersProps>(({
+                                                                                 productFilters,
+                                                                                 userFilters,
+                                                                                 onUpdateUserFilters
+                                                                             }) => {
 
     const handleFilterChange = (filterCategory: string, filterValue: string) => (value: boolean) => {
         let newUserFilters: ProductFilters;
@@ -54,4 +54,4 @@ export const AllProductsSideBar: React.FC<ProductFiltersProps> = ({
             {renderFilters()}
         </div>
     )
-}
+})
