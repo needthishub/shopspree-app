@@ -12,8 +12,3 @@ export interface ProductCardModalProps {
 
     addToCart(product: ProductPurchase): any;
 }
-
-export interface ProductCardModalState {
-    selectedVariant: ProductVariantCompleteDetails;
-    quantity: number;
-}

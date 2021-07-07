@@ -6,7 +6,7 @@ export type CustomerInformationFieldsList = {
 
 export const CUSTOMER_INFORMATION_FIELDS_LIST: CustomerInformationFieldsList = {
     completeName: 'Complete Name (LastName, FirstName M.I.)',
-    address: 'Address (House #, Lot, B1k, Street',
+    address: 'Address (House #, Lot, B1k, Street)',
     city: 'City',
     stateOrProvince: 'State/Province',
     mobileNo: 'Mobile #',

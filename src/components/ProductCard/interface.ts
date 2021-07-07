@@ -6,7 +6,3 @@ export interface ProductCardProps {
 
     addToCart(product: ProductPurchase): any;
 }
-
-export interface ProductCardState {
-    showDetails: boolean;
-}

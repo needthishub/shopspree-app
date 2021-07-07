@@ -1,6 +1,6 @@
 import React from 'react';
 import {ShoppingCartProductProps} from "./interface";
-import {getDiscountedPrice, getSubtotalPrice, parsePrice} from "../../utils/product";
+import {getSubtotalPrice} from "../../utils/product";
 import {upperCaseFirstLetter} from "../../utils/helper";
 import './style.css';
 
@@ -11,7 +11,7 @@ export const ShoppingCartProduct: React.FC<ShoppingCartProductProps> = ({product
 
     const handleOnClickCloseButton = () => {
         removeToCart(product);
-    }
+    };
 
     return (
         <div className="shopping-cart-product-container">
@@ -28,4 +28,4 @@ export const ShoppingCartProduct: React.FC<ShoppingCartProductProps> = ({product
             <div className="close-button" onClick={handleOnClickCloseButton}><i className="fas fa-times"/></div>
         </div>
     );
-}
+};

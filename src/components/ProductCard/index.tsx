@@ -1,59 +1,49 @@
-import React from 'react';
-import {ProductCardProps, ProductCardState} from './interface';
+import React, {useState} from 'react';
+import {ProductCardProps} from './interface';
 import './style.css';
 import {ProductCardModal} from "../ProductCardModal";
 import {getProductVariantDetails} from "../../utils/product";
 import {ProductPurchase} from "../../store/reducers/userReducer";
-import ThemeContextProvider, {ThemeContext} from "../../context/ThemeContext";
+import {ThemeContext} from "../../context/ThemeContext";
 
-export class ProductCard extends React.Component<ProductCardProps, ProductCardState> {
-    constructor(props: ProductCardProps) {
-        super(props);
-        this.state = {
-            showDetails: false,
-        }
+export const ProductCard: React.FC<ProductCardProps> = ({product, addToCart}) => {
+    const [showDetails, setShowDetails] = useState(false);
+
+    const onClickProductCard = () => {
+        setShowDetails(true);
     }
 
-    onClickProductCard = () => {
-        this.setState({showDetails: true});
+    const onClickOutsideModalBody = () => {
+        setShowDetails(false);
     }
 
-    onClickOutsideModalBody = () => {
-        this.setState({showDetails: false});
+    const handleAddToCard = (product: ProductPurchase) => {
+        addToCart(product);
+        setShowDetails(false);
     }
 
-    handleAddToCard = (product: ProductPurchase) => {
-        this.props.addToCart(product);
-        this.setState({showDetails: false});
+    const {initialVariant, variants, variantsOptionsAvailable} = getProductVariantDetails(product);
 
-    }
-
-    render() {
-        const {showDetails} = this.state;
-        const {product, addToCart} = this.props
-        const {initialVariant, variants, variantsOptionsAvailable} = getProductVariantDetails(product);
-
-        return (
-            <ThemeContext.Consumer>
-                {theme => (
-                    initialVariant ? (
-                        <div onClick={this.onClickProductCard} className={`product-card-container ${theme}`}>
-                            <div style={{backgroundImage: `url(${initialVariant.image})`}} className="product-image"/>
-                            <div className="product-details">
-                                <p>{initialVariant.title}</p>
-                            </div>
-                            <ProductCardModal
-                                onClickOutsideModalBody={this.onClickOutsideModalBody}
-                                show={showDetails}
-                                initialVariant={initialVariant}
-                                variants={variants}
-                                variantsOptionsAvailable={variantsOptionsAvailable}
-                                addToCart={this.handleAddToCard}/>
+    return (
+        <ThemeContext.Consumer>
+            {theme => (
+                initialVariant ? (
+                    <div onClick={onClickProductCard} className={`product-card-container ${theme}`}>
+                        <div style={{backgroundImage: `url(${initialVariant.image})`}} className="product-image"/>
+                        <div className="product-details">
+                            <p>{initialVariant.title}</p>
                         </div>
-                    ) : null
-                )}
-            </ThemeContext.Consumer>
-        )
-    }
+                        <ProductCardModal
+                            onClickOutsideModalBody={onClickOutsideModalBody}
+                            show={showDetails}
+                            initialVariant={initialVariant}
+                            variants={variants}
+                            variantsOptionsAvailable={variantsOptionsAvailable}
+                            addToCart={handleAddToCard}/>
+                    </div>
+                ) : null
+            )}
+        </ThemeContext.Consumer>
+    )
 }
 

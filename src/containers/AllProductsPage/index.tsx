@@ -28,7 +28,7 @@ const AllProductsPage: React.FC<AllProductsPageProps> = () => {
 
     const handleAddToCart = (productPurchase: ProductPurchase) => {
         dispatch(addToCart(productPurchase));
-    }
+    };
 
     const renderAllProducts = () => {
         return shopProducts.products.map((product) => {
@@ -38,14 +38,14 @@ const AllProductsPage: React.FC<AllProductsPageProps> = () => {
                             addToCart={handleAddToCart}
                             product={product}/>
                     </div>
-                )
+                );
             }
-        )
-    }
+        );
+    };
 
     const handlePageChange = (selectedPage: number) => {
         if (userSelectedPage !== selectedPage) dispatch(updateUserShopProductsPage(selectedPage));
-    }
+    };
 
     const handleUpdateUserFilters = useCallback((filters: ProductFilters) => {
         dispatch(updateUserFilters(filters));
@@ -64,7 +64,6 @@ const AllProductsPage: React.FC<AllProductsPageProps> = () => {
             </div>
         </div>
     );
-}
-
+};
 
 export default AllProductsPage;
