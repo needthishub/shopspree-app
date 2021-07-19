@@ -16,11 +16,11 @@ export const Modal: React.FC<ModalProps> = ({onClickOutsideModalBody, show = tru
 
     const removerOnClickPropagation = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
-    }
+    };
 
     const handleClickOutsideModalBody = () => {
         onClickOutsideModalBody && onClickOutsideModalBody();
-    }
+    };
 
     return show ? ReactDOM.createPortal(
         <div onClick={removerOnClickPropagation} className="modal-container">
@@ -31,4 +31,4 @@ export const Modal: React.FC<ModalProps> = ({onClickOutsideModalBody, show = tru
         </div>,
         el.current
     ) : null;
-}
+};

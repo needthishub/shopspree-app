@@ -15,5 +15,5 @@ export const HeaderNavigation: React.FC = () => {
                 <ShoppingCart/>
             </div>
         </div>
-    )
+    );
 };

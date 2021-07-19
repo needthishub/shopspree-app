@@ -12,5 +12,5 @@ export const Partners: React.FC = () => {
             </div>
 
         </div>
-    )
+    );
 }

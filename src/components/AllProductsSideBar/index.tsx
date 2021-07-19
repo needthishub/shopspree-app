@@ -7,27 +7,27 @@ import './style.css';
 import update from "immutability-helper";
 
 export const AllProductsSideBar = React.memo<ProductFiltersProps>(({
-                                                                                 productFilters,
-                                                                                 userFilters,
-                                                                                 onUpdateUserFilters
-                                                                             }) => {
+                                                                       productFilters,
+                                                                       userFilters,
+                                                                       onUpdateUserFilters
+                                                                   }) => {
 
     const handleFilterChange = (filterCategory: string, filterValue: string) => (value: boolean) => {
         let newUserFilters: ProductFilters;
 
         if (value) {
-            newUserFilters = update(userFilters, {[filterCategory]: {$push: [filterValue]}})
+            newUserFilters = update(userFilters, {[filterCategory]: {$push: [filterValue]}});
         } else {
             newUserFilters = update(userFilters,
                 {
                     [filterCategory]: {
                         $set: userFilters[filterCategory as keyof ProductFilters].filter(val => val !== filterValue)
                     }
-                })
+                });
         }
 
         onUpdateUserFilters(newUserFilters);
-    }
+    };
 
     const renderFilters = () => {
         return Object.keys(productFilters).map(filterCategory => {
@@ -42,16 +42,16 @@ export const AllProductsSideBar = React.memo<ProductFiltersProps>(({
                                 <Checkbox
                                     onChange={handleFilterChange(filterCategory, filterValues)}>{filterValues}</Checkbox>
                             </div>
-                        )
+                        );
                     })}
                 </div>
             );
-        })
-    }
+        });
+    };
 
     return (
         <div className="all-products-side-bar">
             {renderFilters()}
         </div>
-    )
-})
+    );
+});

@@ -14,15 +14,15 @@ export const ProductCardModalVariantOptions: React.FC<ProductCardModalVariantOpt
                     </div>
                 </div>
             );
-        }
+        };
 
        const handleSizeChange = (size: string) => () => {
             onSizeChange(size);
-       }
+       };
 
        const handleColorChange = (color: string) => () => {
             onColorChange(color);
-       }
+       };
 
         const sizesUI: React.ReactNode[] = [];
         const colorsUI: React.ReactNode[] = [];
@@ -70,4 +70,4 @@ export const ProductCardModalVariantOptions: React.FC<ProductCardModalVariantOpt
                 {renderVariantOptionsContainer('Colors', colorsUI)}
             </div>
         );
-    }
+    };

@@ -17,4 +17,4 @@ export const ProductCardModalPriceUI: React.FC<ProductCardModalPriceUIProps> = (
     );
 
     return priceUI;
-}
+};

@@ -1,6 +1,9 @@
 .homepage-container .cover-image {
     background-image: url('http://localhost:1234/public/homepage/coverimage.JPG');
+    max-height: 800px;
     height: 800px;
+    width: 100%;
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
 }

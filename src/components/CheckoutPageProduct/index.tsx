@@ -30,4 +30,4 @@ export const CheckoutPageProduct: React.FC<CheckoutPageProductProps> = ({product
             </div>
         </div>
     );
-}
+};

@@ -22,3 +22,15 @@
     color: #c8c8c8;
     left: Calc(50vw - 19px);
 }
+
+@media only screen and (max-width: 768px) {
+    .theme-context-button {
+        left: Calc(50vw + 20vw);
+    }
+
+    .theme-context-button.dark {
+        color: #c8c8c8;
+        left: Calc(50vw + 20vw);
+    }
+
+}

@@ -21,5 +21,5 @@ export const ShopQuality: React.FC = () => {
                 <p>Rest assured that the proccess and materials used will never harm out enviroment.</p>
             </div>
         </div>
-    )
-}
+    );
+};

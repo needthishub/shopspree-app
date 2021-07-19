@@ -39,7 +39,7 @@ const CustomerInformation: React.FC<CustomerInformationProps> = ({cart, history,
 
         hasCompletePurchaseClick && validateInputField(field, value);
 
-    }
+    };
 
     const renderInputFields = () => {
         return fieldsList.map(field => {
@@ -106,7 +106,7 @@ const CustomerInformation: React.FC<CustomerInformationProps> = ({cart, history,
     const handleShopMoreClick = () => {
         cleanCart();
         history.push(ROUTE.ALL_PRODUCTS)
-    }
+    };
 
     return (
         <div className="customer-info-container">
@@ -123,6 +123,6 @@ const CustomerInformation: React.FC<CustomerInformationProps> = ({cart, history,
             </Modal>
         </div>
     );
-}
+};
 
 export default CustomerInformation;

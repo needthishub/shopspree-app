@@ -13,27 +13,27 @@ export const ProductCardModal: React.FC<ProductCardModalProps> = ({initialVarian
 
     const handleClickQuantityAddButton = () => {
         selectedVariant.stock > quantity && setQuantity( quantity + 1);
-    }
+    };
 
     const handleClickQuantityMinusButton = () => {
         quantity > 1 && setQuantity(quantity - 1);
-    }
+    };
 
     const handleSizeChange = (size: string) => {
         if (selectedVariant.size !== size) {
             setSelectedVariant(variants.filter(variant => variant.size === size && variant.stock > 0)[0])
         }
-    }
+    };
 
     const handleColorChange = (color: string) => {
         if(selectedVariant.color !== color) {
             setSelectedVariant(variants.filter(variant => variant.size === selectedVariant.size && variant.color === color && variant.stock > 0)[0])
         }
-    }
+    };
 
     const handleAddToCart = () => {
         addToCart({...selectedVariant, quantity});
-    }
+    };
 
     const {title, image} = selectedVariant;
 
@@ -69,4 +69,4 @@ export const ProductCardModal: React.FC<ProductCardModalProps> = ({initialVarian
                 </div>
             </Modal>
         );
-}
+};

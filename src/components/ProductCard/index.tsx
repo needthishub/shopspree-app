@@ -11,16 +11,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({product, addToCart}) =>
 
     const onClickProductCard = () => {
         setShowDetails(true);
-    }
+    };
 
     const onClickOutsideModalBody = () => {
         setShowDetails(false);
-    }
+    };
 
     const handleAddToCard = (product: ProductPurchase) => {
         addToCart(product);
         setShowDetails(false);
-    }
+    };
 
     const {initialVariant, variants, variantsOptionsAvailable} = getProductVariantDetails(product);
 
@@ -44,6 +44,5 @@ export const ProductCard: React.FC<ProductCardProps> = ({product, addToCart}) =>
                 ) : null
             )}
         </ThemeContext.Consumer>
-    )
-}
-
+    );
+};

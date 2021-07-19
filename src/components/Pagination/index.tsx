@@ -15,20 +15,20 @@ const Pagination: React.FC<PaginationProps> = ({overrideSelectedPage, onChange, 
 
         setSelectedPage(newPage);
         onChange(newPage);
-    }
+    };
 
     const handleRightCaretClick = () => {
         const newPage = currentSelectedPage === numberOfPages ? currentSelectedPage : currentSelectedPage + 1;
         setSelectedPage(newPage);
         onChange(newPage);
-    }
+    };
 
     const pageClick = (page: number) => () => {
         if (selectedPage !== page) {
             setSelectedPage(page);
             onChange(page);
         }
-    }
+    };
 
     const renderPageButtons = () => {
         return [...new Array(numberOfPages)].map((value, index) => {
@@ -43,9 +43,9 @@ const Pagination: React.FC<PaginationProps> = ({overrideSelectedPage, onChange, 
                 >
                     {page}
                 </Button>
-            )
-        })
-    }
+            );
+        });
+    };
 
     return (
         <div className={`pagination-container ${theme}`}>
@@ -56,6 +56,6 @@ const Pagination: React.FC<PaginationProps> = ({overrideSelectedPage, onChange, 
             <i onClick={handleRightCaretClick} className="fas fa-caret-right page-caret"/>
         </div>
     );
-}
+};
 
 export default Pagination;

@@ -16,4 +16,4 @@ export const ProductCardModalQuantityUI: React.FC<ProductCardModalQuantityUIProp
 
         </div>
     );
-}
+};
