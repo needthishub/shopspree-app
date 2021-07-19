@@ -1,4 +1,4 @@
-# Getting Started with ecom-shop-react-ts-21
+# Getting Started with shopspree-app
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
