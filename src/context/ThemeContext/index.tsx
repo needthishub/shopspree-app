@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './style.css';
-import {Button} from "../../ui-components/Button";
-import {upperCaseFirstLetter} from "../../utils/helper";
 
 export type ThemeContextValue = 'light' | 'dark';
 

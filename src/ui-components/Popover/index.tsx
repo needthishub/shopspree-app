@@ -8,6 +8,8 @@ import {INITIAL_CHILDREN_POSITION} from "./constant";
 const Popover: React.FC<PopoverProps> = ({children, controlShow, onClick, position, popoverBodyClassName, content}) => {
     const root = useRef(document.querySelector('#root') as HTMLDivElement);
     const el = useRef(document.createElement('div') as HTMLDivElement);
+    const currentRoot = root.current;
+    const currentEl = el.current;
     const childrenRef = useRef<HTMLDivElement>(null);
     const popperRef = useRef<HTMLDivElement>(null);
     const [show, setShow] = useState(false);
@@ -24,7 +26,7 @@ const Popover: React.FC<PopoverProps> = ({children, controlShow, onClick, positi
     const ChildrenComponent = React.cloneElement(children as React.ReactElement, {ref: childrenRef, onClick: handleContentClick});
 
     useEffect(() => {
-        root.current.appendChild(el.current);
+        currentRoot.appendChild(currentEl);
         setTimeout(() => {
             const childrenElement = childrenRef.current;
 
@@ -40,9 +42,9 @@ const Popover: React.FC<PopoverProps> = ({children, controlShow, onClick, positi
             }
         }, 500);
         return function cleanup() {
-            root.current.removeChild(el.current);
+            currentRoot.removeChild(currentEl);
         };
-    }, []);
+    }, [currentRoot, currentEl]);
 
     useLayoutEffectOnUpdate(() => {
         const popperWidth = popperRef.current ?

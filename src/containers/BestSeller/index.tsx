@@ -18,7 +18,7 @@ const BestSeller: React.FC<BestSellerProps> = () => {
         if (!bestSellerProducts.length) {
             dispatch(fetchAllBestSellerProducts());
         }
-    }, []);
+    }, [bestSellerProducts.length, dispatch, fetchAllBestSellerProducts]);
 
     const handleAddToCart = (productPurchase: ProductPurchase) => {
         dispatch(addToCart(productPurchase));

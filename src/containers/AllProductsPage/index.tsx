@@ -24,7 +24,7 @@ const AllProductsPage: React.FC<AllProductsPageProps> = () => {
         if (!shopProducts.products.length) {
             dispatch(fetchShopProductsAndFilters());
         }
-    }, []);
+    });
 
     const handleAddToCart = (productPurchase: ProductPurchase) => {
         dispatch(addToCart(productPurchase));
@@ -49,7 +49,7 @@ const AllProductsPage: React.FC<AllProductsPageProps> = () => {
 
     const handleUpdateUserFilters = useCallback((filters: ProductFilters) => {
         dispatch(updateUserFilters(filters));
-    }, []);
+    }, [updateUserFilters, dispatch]);
 
     return (
         <div className="all-products-page-container">

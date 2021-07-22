@@ -4,7 +4,6 @@ import ShopAPI, {GetProductsOptions, ProductFiltersAPIResponse} from "../../api/
 import {ShopProducts} from "../reducers/shopReducer";
 import {User} from "../reducers/userReducer";
 import {StoreStateType} from "../rootReducer";
-import {convertFiltersToCategories} from "../../utils/helper";
 
 function* workerFetchShopProductsSaga(action: FetchShopProductsAction) {
     const shopAPI = new ShopAPI();

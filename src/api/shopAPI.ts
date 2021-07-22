@@ -18,17 +18,19 @@ export interface Order {
     user: CustomerInformationFieldsList;
 }
 
+const url = 'https://shopspree-app-server.herokuapp.com';
+
 class ShopAPI {
     getProducts = (options: GetProductsOptions) => {
         const {page, size, category} = options;
         const pageQueryParam = `page=${page || ''}`;
         const sizeQueryParam = `&size=${size || ''}`;
         const categoryQueryParam = `&category=${category ? category.join(`&category=`) : ''}`;
-        return axios.get(`http://localhost:1234/product/all?${pageQueryParam}${sizeQueryParam}${categoryQueryParam}`);
+        return axios.get(`${url}/product/all?${pageQueryParam}${sizeQueryParam}${categoryQueryParam}`);
     }
 
     getProductFilters = () => {
-        return axios.get('http://localhost:1234/product/filters');
+        return axios.get(`${url}/product/filters`);
     }
 
     postOrder = (order: Order) => {
@@ -36,7 +38,7 @@ class ShopAPI {
             order
         };
 
-        return axios.post('http://localhost:1234/order', body);
+        return axios.post(`${url}/order`, body);
     }
 }
 

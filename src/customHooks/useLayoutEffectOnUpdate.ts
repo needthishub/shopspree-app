@@ -9,6 +9,6 @@ export const useLayoutEffectOnUpdate = (effect: React.EffectCallback, deps?: Rea
         } else {
             effect();
         }
-    }, deps);
+    }, [deps, effect]);
 
 }

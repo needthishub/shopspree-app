@@ -6,13 +6,15 @@ import './style.css';
 export const Modal: React.FC<ModalProps> = ({onClickOutsideModalBody, show = true, modalBodyClassName, children}) => {
     const root = useRef(document.querySelector("#root") as HTMLDivElement);
     const el = useRef(document.createElement("div"));
+    const currentRoot = root.current;
+    const currentEl = el.current;
 
     useEffect(() => {
-        root.current.appendChild(el.current);
+        currentRoot.appendChild(currentEl);
         return function cleanup() {
-            root.current.removeChild(el.current);
+            currentRoot.removeChild(currentEl);
         };
-    }, []);
+    }, [currentRoot, currentEl]);
 
     const removerOnClickPropagation = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.stopPropagation();
@@ -29,6 +31,6 @@ export const Modal: React.FC<ModalProps> = ({onClickOutsideModalBody, show = tru
                 {children}
             </div>
         </div>,
-        el.current
+        currentEl
     ) : null;
 };
